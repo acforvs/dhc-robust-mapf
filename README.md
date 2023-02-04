@@ -9,8 +9,7 @@
 
 **Multi-agent pathfinding in partially observable environments. Search-based vs. RL-based algorithms.**
 
-The main goal of this repository is to provide a DHC [1] model implementation alongside with some benchmarks and charts. 
-We also aim to compare the performance of the DHC model with the basic M* algorithm.
+The main goal of this repository is to provide a DHC [1] model implementation alongside with some benchmarks and charts.
 
 ## Requirements
 In order for `models.dhc.train` to be successfully run, you have to have a machine equipped with 1 GPU and several CPUs.
