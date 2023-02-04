@@ -4,6 +4,7 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat&logo=PyTorch&logoColor=white)
 ![Poetry](https://img.shields.io/badge/Poetry-%2300C4CC.svg?style=flat&logo=Poetry&logoColor=white)
 ![Black](https://img.shields.io/badge/code%20style-black-000000.svg)
+![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)
 
 ## Description
 
@@ -118,15 +119,19 @@ We used 20 CPU cores, 18 were used for the actors, additionally, 2 cores were us
 pip3 install black 
 ```
 
-3. Use [black](https://github.com/psf/black) to ensure that the codestyle remains great
+2. Use [black](https://github.com/psf/black) to ensure that the codestyle remains great
 ```shell
-poetry run black dir
+poetry run black .
 ```
-2. Make sure tests are OK 
+3. Use [ruff](https://github.com/charliermarsh/ruff) to lint all the files
+```shell
+poetry run ruff .
+```
+4. Make sure tests are OK 
 ```shell
 poetry run pytest
 ```
-3. Create a PR with new features
+5. Create a PR with new features
 </details>
 
 ## References

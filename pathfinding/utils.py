@@ -111,7 +111,8 @@ def test_group(test_group, test_generation_fn, singe_test_fn, is_random=True):
     else:
         num_agents, map_filename, scenary_filename = test_group
         print(
-            f"test group: {map_filename} map {scenary_filename} scen {num_agents} agents"
+            f"test group: {map_filename} map "
+            f"{scenary_filename} scen {num_agents} agents"
         )
         _run_tests(
             os.path.join(

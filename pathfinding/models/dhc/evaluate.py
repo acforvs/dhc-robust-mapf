@@ -1,7 +1,6 @@
 import fire
 import numpy as np
 import os
-import pickle
 import torch
 
 from pathfinding.environment import Environment, MovingAIBenchmarkingEnvironment
@@ -68,9 +67,14 @@ def test_model(
     network.share_memory()
 
     if is_random_maps:
-        func = lambda x: _test_generation_fn_random(x, network)
+
+        def func(x):
+            return _test_generation_fn_random(x, network)
+
     else:
-        func = lambda x: _test_generation_fn_moving_ai(x, network)
+
+        def func(x):
+            return _test_generation_fn_moving_ai(x, network)
 
     for group in test_groups:
         test_group(group, func, _test_one_case, is_random=is_random_maps)

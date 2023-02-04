@@ -111,7 +111,10 @@ class GlobalBuffer:
 
     def add(self, data: Tuple):
         """
-        data: actor_id 0, num_agents 1, map_len 2, obs_buf 3, act_buf 4, rew_buf 5, hid_buf 6, td_errors 7, done 8, size 9, comm_mask 10
+        data: actor_id 0, num_agents 1,
+        map_len 2, obs_buf 3, act_buf 4,
+        rew_buf 5, hid_buf 6, td_errors 7,
+        done 8, size 9, comm_mask 10
         """
         if data[0] >= 12:
             stat_key = (data[1], data[2])
@@ -306,7 +309,8 @@ class GlobalBuffer:
         """Update priorities of sampled transitions"""
         with self.lock:
 
-            # discard the indices that already been discarded in replay buffer during training
+            # discard the indices that already been discarded
+            # in replay buffer during training
             if self.ptr > old_ptr:
                 # range from [old_ptr, self.ptr)
                 mask = (idxes < old_ptr * self.local_buffer_capacity) | (
@@ -390,11 +394,11 @@ class GlobalBuffer:
             if (i + 1, WRK_CONFIG["max_map_length"]) not in self.stat_dict:
                 return False
 
-            l = self.stat_dict[(i + 1, WRK_CONFIG["max_map_length"])]
+            max_map_len = self.stat_dict[(i + 1, WRK_CONFIG["max_map_length"])]
 
-            if len(l) < 200:
+            if len(max_map_len) < 200:
                 return False
-            elif sum(l) < 200 * WRK_CONFIG["pass_rate"]:
+            elif sum(max_map_len) < 200 * WRK_CONFIG["pass_rate"]:
                 return False
 
         return True
@@ -574,7 +578,8 @@ class Actor:
             )
 
             if random.random() < self.epsilon:
-                # Note: only one agent do random action in order to keep the environment stable
+                # Note: only one agent do random action
+                # in order to keep the environment stable
                 actions[0] = np.random.randint(0, 5)
             # take action in env
             (next_obs, next_pos), rewards, done, _ = self.env.step(actions)

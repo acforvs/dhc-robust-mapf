@@ -1,13 +1,12 @@
+from pathfinding.settings import yaml_data as settings
+from pathfinding import movingai
+
 import matplotlib.pyplot as plt
 import numpy as np
 import random
-from typing import List, Union
+from typing import List
 
 plt.ion()
-from matplotlib import colors
-
-from pathfinding.settings import yaml_data as settings
-from pathfinding import movingai
 
 ENV_CONFIG = settings["environment"]
 

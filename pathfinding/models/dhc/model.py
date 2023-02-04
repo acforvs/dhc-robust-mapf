@@ -2,7 +2,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.nn.utils.rnn import pack_padded_sequence
 
 if torch.cuda.is_available():
     from torch.cuda.amp import autocast
@@ -128,7 +127,7 @@ class CommBlock(nn.Module):
         if len(comm_idx) > 1:
             update_mask = update_mask.unsqueeze(2)
 
-        attn_mask = comm_mask == False
+        attn_mask = comm_mask is False
 
         for _ in range(self.num_layers):
 
@@ -171,9 +170,8 @@ class Network(nn.Module):
             ResBlock(cnn_channels),
             ResBlock(cnn_channels),
             ResBlock(cnn_channels),
-            nn.Conv2d(
-                cnn_channels, 16, 1, 1
-            ),  # differs from the paper, see https://arxiv.org/pdf/2106.11365.pdf, Figure 1
+            nn.Conv2d(cnn_channels, 16, 1, 1),  # differs from the paper
+            # see https://arxiv.org/pdf/2106.11365.pdf, Figure 1
             nn.ReLU(inplace=True),
             nn.Flatten(),
         )
