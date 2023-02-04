@@ -1,0 +1,55 @@
+dhc:
+  cnn_channels: 128
+  fov: !!python/tuple [9, 9]
+  observation_radius: 4  # since the FOV is 9x9
+  observation_shape: !!python/tuple [6, 9, 9]
+  hidden_dim: 256
+  max_comm_agents: 3 # includes the agent itself
+  batch_size: 192
+  max_num_agents: 2
+  latent_dim: 784  # 16 * 7 * 7, do not forget to change if the observation_shape is changed
+  max_episode_length: 256
+
+  communication:
+    num_comm_layers: 2
+    num_comm_heads: 2
+
+  buffer:
+    action_dim: 5
+    forward_steps: 2
+
+  worker:
+    episode_capacity: 2048
+    init_env_settings: !!python/tuple [ 1, 10 ]
+    max_comm_agents: 3
+    prioritized_replay_alpha: 0.6
+    prioritized_replay_beta: 0.4
+    forward_steps: 2
+    seq_len: 16
+    max_map_length: 40
+    pass_rate: 0.9
+    learning_starts: 50000
+    training_times: 600000
+    target_network_update_freq: 2000
+    save_interval: 2000
+    actor_update_steps: 400
+
+  train:
+    num_actors: 6
+    log_interval: 10
+
+
+environment:
+  map_length: 50
+  num_agents: 2
+  observation_radius: 4
+  reward_fn: 
+    move: -0.075
+    stay_on_goal: 0
+    stay_off_goal: -0.075
+    collision: -0.5
+    finish: 3
+
+  init_env_settings: !!python/tuple [1, 10]
+  observation_shape: !!python/tuple [6, 9, 9]
+  action_dim: 5
