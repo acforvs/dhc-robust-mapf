@@ -15,6 +15,7 @@ pyyaml = "^6.0"
 matplotlib = "^3.6.2"
 ray = "^2.2.0"
 ruff = "^0.0.241"
+numpy = "1.23.1"
 
 [tool.poetry.group.dev.dependencies]
 torch = "^1.12.1"
