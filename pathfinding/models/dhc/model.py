@@ -127,7 +127,7 @@ class CommBlock(nn.Module):
         if len(comm_idx) > 1:
             update_mask = update_mask.unsqueeze(2)
 
-        attn_mask = comm_mask == False # noqa
+        attn_mask = comm_mask == False  # noqa
 
         for _ in range(self.num_layers):
 
@@ -223,11 +223,19 @@ class Network(nn.Module):
 
         comm_mask = torch.bitwise_and(in_obs_mask, dist_mask)
 
-        self.hidden = self.comm(self.hidden, comm_mask)
-        self.hidden = self.hidden.squeeze(0)
+        # print(f'hidden: {self.hidden.shape}')
+        # [1, 15, 256]
 
-        adv_val = self.adv(self.hidden)
-        state_val = self.state(self.hidden)
+        self.hidden = self.comm(self.hidden, comm_mask)  # [1, 15, 256]
+
+        # print(f'hidden after comm: {self.hidden.shape}')
+        self.hidden = self.hidden.squeeze(0)  # [15, 256]
+        # print(f'hidden after squeeze: {self.hidden.shape}')
+
+        adv_val = self.adv(self.hidden)  # [15, 5]
+        # print(f'adv_val: {adv_val.shape}')
+        state_val = self.state(self.hidden)  # [15, 1
+        # print(f'state_val: {state_val.shape}')
 
         q_val = state_val + adv_val - adv_val.mean(1, keepdim=True)
 

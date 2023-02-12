@@ -20,7 +20,7 @@ def _test_one_case(args):
     done, steps = False, 0
     network.reset()
 
-    while not done and env.steps < 5 * GENERAL_CONFIG["max_episode_length"]:
+    while not done and env.steps < GENERAL_CONFIG["max_episode_length"]:
         actions, _, _, _ = network.step(
             torch.as_tensor(obs.astype(np.float32)),
             torch.as_tensor(pos.astype(np.float32)),

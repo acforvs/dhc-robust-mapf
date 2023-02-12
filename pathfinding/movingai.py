@@ -16,7 +16,9 @@ class TestDescription:
 
 
 def _transform(line: str) -> list[int]:
-    return [int(ch) for ch in line.replace("@", "1").replace(".", "0")]
+    return [
+        int(ch) for ch in line.replace("@", "1").replace(".", "0").replace("T", "1")
+    ]
 
 
 def read_map(mapfile: str) -> np.array:
@@ -37,6 +39,11 @@ def read_map(mapfile: str) -> np.array:
             )
 
         return np.array(map)
+
+
+def get_map_density(mapfile: str) -> float:
+    map = read_map(mapfile)
+    return (map == 1).sum() / (map.shape[0] * map.shape[1])
 
 
 def read_scenario_from_file(scenfile: str):
@@ -64,3 +71,15 @@ def get_tests_for_multiple_agents(
 
 if __name__ == "__main__":
     fire.Fire()
+
+# success rate: 0.00%
+# soft-success rate: 45.78%
+# average step: 256.0
+
+# success rate: 0.00%
+# soft-success rate: 85.47%
+# average step: 512.0
+#
+# success rate: 70.00%
+# soft-success rate: 95.78%
+# average step: 773.1

@@ -112,6 +112,7 @@ class Environment:
         partition_list = [
             partition for partition in partition_list if len(partition) >= 2
         ]
+        self._part = partition_list
 
         while len(partition_list) == 0:
             self.map = np.random.choice(
