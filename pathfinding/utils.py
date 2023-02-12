@@ -5,7 +5,11 @@ import os
 import pickle
 
 from pathfinding.environment import Environment, MovingAIBenchmarkingEnvironment
-from pathfinding.movingai import get_tests_for_multiple_agents
+from pathfinding.movingai import (
+    get_tests_for_multiple_agents,
+    read_map,
+    TestDescription,
+)
 
 
 def generate_test_filename(length: int, num_agents: int, density: float, ext="pkl"):
@@ -133,6 +137,67 @@ def calculate_metrics(env: Environment, steps: int):
     ).sum() / env.agents_pos.shape[0]
 
     return np.array_equal(env.agents_pos, env.goals_pos), steps, soft_equality
+
+
+def _dump_to_scen_file(
+    scenfile: str,
+    tests: list[TestDescription],
+    map_h: int,
+    map_w: int,
+):
+    with open(scenfile, "w") as scen:
+        print("version 1", file=scen)
+        for line_no, test in enumerate(tests):
+            test_str = "\t".join(
+                map(
+                    str,
+                    [
+                        line_no,
+                        test.mapfile,
+                        map_h,
+                        map_w,
+                        test.x0,
+                        test.y0,
+                        test.x1,
+                        test.y1,
+                        test.expected_dist,
+                    ],
+                )
+            )
+            print(test_str, file=scen)
+
+
+def generate_scen_for_custom_maps(
+    map_filename: str,
+    num_agents: int = 8,
+    num_tests: int = 10,
+):
+    path_parts = map_filename.split(os.sep)
+    dirpath, mapfile = f"{os.sep}".join(path_parts[:-1]), path_parts[-1]
+    scenfile = f"{dirpath}{os.sep}generated_{mapfile.split('.')[-2]}.scen"
+    custom_map = read_map(map_filename)
+
+    h, w = custom_map.shape
+
+    pos = np.argwhere(custom_map == 0)
+
+    tests = []
+    rng = np.random.default_rng()
+    for _ in range(num_tests):
+        agents = rng.choice(pos, 2 * num_agents, replace=False)
+        start, finish = agents[:num_agents], agents[num_agents:]
+        for s, f in zip(start, finish):
+            tests.append(
+                TestDescription(
+                    x0=s[1],
+                    y0=s[0],
+                    x1=f[1],
+                    y1=f[0],
+                    expected_dist=-1,
+                    mapfile=mapfile,
+                )
+            )
+    _dump_to_scen_file(scenfile, tests, h, w)
 
 
 if __name__ == "__main__":
