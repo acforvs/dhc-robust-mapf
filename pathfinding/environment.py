@@ -24,52 +24,36 @@ color_map = np.array(
 
 
 def map_partition(map):
-    """
-    partitioning map into independent partitions
-    """
-
-    empty_pos = np.argwhere(map == 0).astype(np.int).tolist()
-
-    empty_pos = [tuple(pos) for pos in empty_pos]
+    """Partitioning map into сomponents."""
+    empty_list = np.argwhere(map == 0).tolist()
+    empty_pos = set([tuple(pos) for pos in empty_list])
 
     if not empty_pos:
-        raise RuntimeError("no empty position")
+        raise RuntimeError("There are no empty positions found")
 
-    partition_list = list()
+    partition_list = []
     while empty_pos:
-
         start_pos = empty_pos.pop()
-
-        open_list = list()
-        open_list.append(start_pos)
-        close_list = list()
+        open_list = [start_pos]
+        close_list = []
 
         while open_list:
             x, y = open_list.pop(0)
-
-            up = x - 1, y
-            if up[0] >= 0 and map[up] == 0 and up in empty_pos:
-                empty_pos.remove(up)
-                open_list.append(up)
-
-            down = x + 1, y
-            if down[0] < map.shape[0] and map[down] == 0 and down in empty_pos:
-                empty_pos.remove(down)
-                open_list.append(down)
-
-            left = x, y - 1
-            if left[1] >= 0 and map[left] == 0 and left in empty_pos:
-                empty_pos.remove(left)
-                open_list.append(left)
-
-            right = x, y + 1
-            if right[1] < map.shape[1] and map[right] == 0 and right in empty_pos:
-                empty_pos.remove(right)
-                open_list.append(right)
+            for dx, dy in (
+                (-1, 0),
+                (1, 0),
+                (0, -1),
+                (0, 1),
+            ):
+                pos = x + dx, y + dy
+                if pos in empty_pos:
+                    empty_pos.remove(pos)
+                    open_list.append(pos)
 
             close_list.append((x, y))
 
-        partition_list.append(close_list)
+        if len(close_list) >= 2:
+            partition_list.append(close_list)
 
     return partition_list
 
