@@ -93,9 +93,6 @@ class Environment:
         ).astype(np.int)
 
         partition_list = map_partition(self.map)
-        partition_list = [
-            partition for partition in partition_list if len(partition) >= 2
-        ]
         self._part = partition_list
 
         while len(partition_list) == 0:
@@ -103,9 +100,6 @@ class Environment:
                 2, self.map_size, p=[1 - self.obstacle_density, self.obstacle_density]
             ).astype(np.int)
             partition_list = map_partition(self.map)
-            partition_list = [
-                partition for partition in partition_list if len(partition) >= 2
-            ]
 
         self.agents_pos = np.empty((self.num_agents, 2), dtype=np.int)
         self.goals_pos = np.empty((self.num_agents, 2), dtype=np.int)
@@ -169,18 +163,12 @@ class Environment:
         ).astype(np.float32)
 
         partition_list = map_partition(self.map)
-        partition_list = [
-            partition for partition in partition_list if len(partition) >= 2
-        ]
 
         while len(partition_list) == 0:
             self.map = np.random.choice(
                 2, self.map_size, p=[1 - self.obstacle_density, self.obstacle_density]
             ).astype(np.float32)
             partition_list = map_partition(self.map)
-            partition_list = [
-                partition for partition in partition_list if len(partition) >= 2
-            ]
 
         self.agents_pos = np.empty((self.num_agents, 2), dtype=np.int)
         self.goals_pos = np.empty((self.num_agents, 2), dtype=np.int)
