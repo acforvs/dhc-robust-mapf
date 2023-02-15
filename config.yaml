@@ -25,7 +25,7 @@ dhc:
     prioritized_replay_alpha: 0.6
     prioritized_replay_beta: 0.4
     forward_steps: 2
-    seq_len: 16
+    seq_len: 20
     max_map_length: 40
     pass_rate: 0.9
     learning_starts: 100000
@@ -35,7 +35,7 @@ dhc:
     actor_update_steps: 400
 
   train:
-    num_actors: 20
+    num_actors: 16
     log_interval: 10
 
 
