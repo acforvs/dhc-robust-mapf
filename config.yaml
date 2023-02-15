@@ -6,7 +6,7 @@ dhc:
   hidden_dim: 256
   max_comm_agents: 3 # includes the agent itself
   batch_size: 192
-  max_num_agents: 2
+  max_num_agents: 12
   latent_dim: 784  # 16 * 7 * 7, do not forget to change if the observation_shape is changed
   max_episode_length: 256
 
@@ -28,14 +28,14 @@ dhc:
     seq_len: 16
     max_map_length: 40
     pass_rate: 0.9
-    learning_starts: 50000
+    learning_starts: 100000
     training_times: 600000
     target_network_update_freq: 2000
     save_interval: 2000
     actor_update_steps: 400
 
   train:
-    num_actors: 6
+    num_actors: 20
     log_interval: 10
 
 
