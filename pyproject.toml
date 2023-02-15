@@ -9,13 +9,14 @@ packages = [{include = "pathfinding"}]
 include = [{path = "tests"}]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 torch = "^1.12.1"
 pyyaml = "^6.0"
 matplotlib = "^3.6.2"
 ray = "^2.2.0"
 ruff = "^0.0.241"
 numpy = "1.23.1"
+pyproject-toml = "^0.0.10"
 
 [tool.poetry.group.dev.dependencies]
 torch = "^1.12.1"
