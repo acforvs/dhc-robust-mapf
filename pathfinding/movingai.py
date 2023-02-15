@@ -1,5 +1,5 @@
 import numpy as np
-
+from typing import Optional
 
 import fire
 from dataclasses import dataclass
@@ -12,7 +12,7 @@ class TestDescription:
     x1: int
     y1: int
     expected_dist: float
-    mapfile: str | None
+    mapfile: Optional[str]
 
 
 def _transform(line: str) -> list[int]:
