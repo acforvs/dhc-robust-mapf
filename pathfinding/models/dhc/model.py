@@ -1,4 +1,5 @@
 # credits to https://github.com/ZiyuanMa/DHC/blob/master/model.py
+import random
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -269,7 +270,12 @@ class Network(nn.Module):
             # hidden size: batch_size*num_agents x self.hidden_dim
             hidden = self.recurrent(latent[i], hidden)
             hidden = hidden.view(self._batch_size, num_agents, self.hidden_dim)
-            hidden = self.comm(hidden, comm_mask[:, i])
+
+            if DHC_CONFIG["communication"]["disable_communication"]:
+                if random.random() < DHC_CONFIG["communication"]["comm_enabled_prob"]:
+                    hidden = self.comm(hidden, comm_mask[:, i])
+            else:
+                hidden = self.comm(hidden, comm_mask[:, i])
             # only hidden from agent 0
             hidden_buffer.append(hidden[:, 0])
             hidden = hidden.view(self._batch_size * num_agents, self.hidden_dim)

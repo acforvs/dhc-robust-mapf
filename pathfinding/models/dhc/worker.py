@@ -371,7 +371,7 @@ class GlobalBuffer:
                     self.stat_dict[add_agent_key] = []
 
                 if key[1] < WRK_CONFIG["max_map_length"]:
-                    add_map_key = (key[0], key[1] + 5)
+                    add_map_key = (key[0], key[1] + 10)
                     if add_map_key not in self.stat_dict:
                         self.stat_dict[add_map_key] = []
 

@@ -6,11 +6,13 @@ dhc:
   hidden_dim: 256
   max_comm_agents: 3 # includes the agent itself
   batch_size: 192
-  max_num_agents: 12
+  max_num_agents: 16
   latent_dim: 784  # 16 * 7 * 7, do not forget to change if the observation_shape is changed
   max_episode_length: 256
 
   communication:
+    disable_communication: 1
+    comm_enabled_prob: 0.7
     num_comm_layers: 2
     num_comm_heads: 2
 

@@ -9,9 +9,9 @@ from pathfinding.settings import yaml_data as settings
 
 TRAIN_CONFIG = settings["dhc"]["train"]
 
-torch.manual_seed(239)
-np.random.seed(239)
-random.seed(239)
+torch.manual_seed(0)
+np.random.seed(0)
+random.seed(0)
 
 
 def main(
