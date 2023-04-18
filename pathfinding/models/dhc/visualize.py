@@ -281,7 +281,7 @@ def _make_single_map_image_for_report():
 
     for i, c in enumerate(parts):
         color = np.array(cmap[i])
-        for (x, y) in c:
+        for x, y in c:
             image[x, y] = color
 
     plt.imshow(image)

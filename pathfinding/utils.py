@@ -88,23 +88,26 @@ def _run_tests(tests_pkl_filename: str, test_generation_fn, singe_test_fn):
     tests = test_generation_fn(tests)
     ret = pool.map(singe_test_fn, tests)
 
-    success, avg_step, soft_equality = 0, 0, 0
-    for is_successful, ttl_steps, soft_equal in ret:
-        success += is_successful
-        avg_step += ttl_steps
-        soft_equality += soft_equal
+    csr, isr, makespan = zip(*ret)
+    csr = 100 * np.array(csr)
+    isr = 100 * np.array(isr)
+    csr_mean, csr_std = np.mean(csr), np.std(csr)
+    isr_mean, isr_std = np.mean(isr), np.std(isr)
+    makespan_mean, makespan_std = np.mean(makespan), np.std(makespan)
 
-    print(f"success rate: {success/len(ret) * 100:.2f}%")
-    print(f"soft-success rate: {soft_equality / len(ret) * 100:.2f}%")
-    print(f"average step: {avg_step/len(ret)}")
+    print(f"CSR: {csr_mean} +- {csr_std}%")
+    print(f"ISR: {isr_mean} +- {isr_std}%")
+    print(f"Makespan: {makespan_mean} +- {makespan_std}")
     print()
+
+    return (csr_mean, csr_std), (isr_mean, isr_std), (makespan_mean, makespan_std)
 
 
 def test_group(test_group, test_generation_fn, singe_test_fn, is_random=True):
     if is_random:
         length, num_agents, density = test_group
         print(f"test group: {length} length {num_agents} agents {density} density")
-        _run_tests(
+        return _run_tests(
             os.path.join(
                 tests_dir_path(),
                 generate_test_filename(length, num_agents, density),
@@ -118,7 +121,7 @@ def test_group(test_group, test_generation_fn, singe_test_fn, is_random=True):
             f"test group: {map_filename} map "
             f"{scenary_filename} scen {num_agents} agents"
         )
-        _run_tests(
+        return _run_tests(
             os.path.join(
                 tests_dir_path(),
                 generate_moving_ai_test_filename(
@@ -130,13 +133,11 @@ def test_group(test_group, test_generation_fn, singe_test_fn, is_random=True):
         )
 
 
-def calculate_metrics(env: Environment, steps: int):
+def calculate_metrics(env: Environment, makespan: int):
     pos_equality = env.agents_pos == env.goals_pos
-    soft_equality = (
-        pos_equality[:, 0] * pos_equality[:, 1]
-    ).sum() / env.agents_pos.shape[0]
-
-    return np.array_equal(env.agents_pos, env.goals_pos), steps, soft_equality
+    isr = (pos_equality[:, 0] * pos_equality[:, 1]).sum() / env.agents_pos.shape[0]
+    csr = np.array_equal(env.agents_pos, env.goals_pos)
+    return csr, isr, makespan
 
 
 def _dump_to_scen_file(

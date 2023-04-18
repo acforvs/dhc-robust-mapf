@@ -131,10 +131,8 @@ class CommBlock(nn.Module):
         attn_mask = comm_mask == False  # noqa
 
         for _ in range(self.num_layers):
-
             info = self.self_attn(latent, attn_mask=attn_mask)
             if len(comm_idx) == 1:
-
                 batch_idx = torch.zeros(len(comm_idx[0]), dtype=torch.long)
                 latent[batch_idx, comm_idx[0]] = self.update_cell(
                     info[batch_idx, comm_idx[0]], latent[batch_idx, comm_idx[0]]

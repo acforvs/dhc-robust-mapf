@@ -33,7 +33,6 @@ class GlobalBuffer:
         beta=WRK_CONFIG["prioritized_replay_beta"],
         max_num_agents=GENERAL_CONFIG["max_num_agents"],
     ):
-
         self.capacity = episode_capacity
         self.local_buffer_capacity = local_buffer_capacity
         self.size = 0
@@ -100,7 +99,6 @@ class GlobalBuffer:
                 time.sleep(0.1)
 
     def get_data(self):
-
         if len(self.batched_data) == 0:
             print("no prepared data")
             data = self.sample_batch(GENERAL_CONFIG["batch_size"])
@@ -120,13 +118,11 @@ class GlobalBuffer:
             stat_key = (data[1], data[2])
 
             if stat_key in self.stat_dict:
-
                 self.stat_dict[stat_key].append(data[8])
                 if len(self.stat_dict[stat_key]) == 201:
                     self.stat_dict[stat_key].pop(0)
 
         with self.lock:
-
             idxes = np.arange(
                 self.ptr * self.local_buffer_capacity,
                 (self.ptr + 1) * self.local_buffer_capacity,
@@ -159,7 +155,6 @@ class GlobalBuffer:
             self.ptr = (self.ptr + 1) % self.capacity
 
     def sample_batch(self, batch_size: int) -> Tuple:
-
         b_obs, b_action, b_reward, b_done, b_steps, b_seq_len, b_comm_mask = (
             [],
             [],
@@ -173,7 +168,6 @@ class GlobalBuffer:
         b_hidden = []
 
         with self.lock:
-
             idxes, priorities = self.priority_tree.batch_sample(batch_size)
             global_idxes = idxes // self.local_buffer_capacity
             local_idxes = idxes % self.local_buffer_capacity
@@ -181,7 +175,6 @@ class GlobalBuffer:
             for idx, global_idx, local_idx in zip(
                 idxes.tolist(), global_idxes.tolist(), local_idxes.tolist()
             ):
-
                 assert (
                     local_idx < self.size_buf[global_idx]
                 ), f"index is {local_idx} but size is {self.size_buf[global_idx]}"
@@ -308,7 +301,6 @@ class GlobalBuffer:
     ):
         """Update priorities of sampled transitions"""
         with self.lock:
-
             # discard the indices that already been discarded
             # in replay buffer during training
             if self.ptr > old_ptr:
@@ -389,7 +381,6 @@ class GlobalBuffer:
         return self.env_settings_set
 
     def check_done(self):
-
         for i in range(GENERAL_CONFIG["max_num_agents"]):
             if (i + 1, WRK_CONFIG["max_map_length"]) not in self.stat_dict:
                 return False
@@ -445,9 +436,7 @@ class Learner:
             not ray.get(self.buffer.check_done.remote())
             and self.counter < WRK_CONFIG["training_times"]
         ):
-
             for i in range(1, self.steps + 1):
-
                 data_id = ray.get(self.buffer.get_data.remote())
                 data = ray.get(data_id)
 
@@ -570,7 +559,6 @@ class Actor:
         obs, pos, local_buffer = self.reset()
 
         while True:
-
             # sample action
             actions, q_val, hidden, comm_mask = self.model.step(
                 torch.from_numpy(obs.astype(np.float32)),

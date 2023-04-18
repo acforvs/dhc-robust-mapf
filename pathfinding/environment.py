@@ -70,7 +70,6 @@ class Environment:
         init_env_settings_set=ENV_CONFIG["init_env_settings"],
         should_init: bool = True,
     ):
-
         self.curriculum = curriculum
         if curriculum:
             self.env_set = [init_env_settings_set]
@@ -108,7 +107,6 @@ class Environment:
 
         # loop to assign agent original position and goal position for each agent
         for i in range(self.num_agents):
-
             pos_idx = random.randint(0, pos_num - 1)
             partition_idx = 0
             for partition in partition_list:
@@ -145,7 +143,6 @@ class Environment:
         self.env_set = new_env_settings_set
 
     def reset(self, num_agents=None, map_length=None):
-
         if self.curriculum:
             rand = random.choice(self.env_set)
             self.num_agents = rand[0]
@@ -176,7 +173,6 @@ class Environment:
         pos_num = sum([len(partition) for partition in partition_list])
 
         for i in range(self.num_agents):
-
             pos_idx = random.randint(0, pos_num - 1)
             partition_idx = 0
             for partition in partition_list:
@@ -210,7 +206,6 @@ class Environment:
         return self.observe()
 
     def load(self, map: np.ndarray, agents_pos: np.ndarray, goals_pos: np.ndarray):
-
         self.map = np.copy(map)
         self.agents_pos = np.copy(agents_pos)
         self.goals_pos = np.copy(goals_pos)
@@ -289,7 +284,6 @@ class Environment:
             for y in range(self.map_size[1]):
                 if self.map[x, y] == 0:
                     for i in range(self.num_agents):
-
                         if x > 0 and dist_map[i, x - 1, y] < dist_map[i, x, y]:
                             assert dist_map[i, x - 1, y] == dist_map[i, x, y] - 1
                             self.heuri_map[i, 0, x, y] = 1
@@ -365,7 +359,6 @@ class Environment:
 
         # first round check, these two conflicts have the heightest priority
         for agent_id in checking_list.copy():
-
             if np.any(next_pos[agent_id] < 0) or np.any(
                 next_pos[agent_id] >= self.map_size[0]
             ):
@@ -383,16 +376,13 @@ class Environment:
         # second round check, agent swapping conflict
         no_conflict = False
         while not no_conflict:
-
             no_conflict = True
             for agent_id in checking_list:
-
                 target_agent_id = np.where(
                     np.all(next_pos[agent_id] == self.agents_pos, axis=1)
                 )[0]
 
                 if target_agent_id:
-
                     target_agent_id = target_agent_id.item()
                     assert target_agent_id != agent_id, "logic bug"
 
@@ -420,7 +410,6 @@ class Environment:
         while not no_conflict:
             no_conflict = True
             for agent_id in checking_list:
-
                 collide_agent_id = np.where(
                     np.all(next_pos == next_pos[agent_id], axis=1)
                 )[0].tolist()
@@ -435,7 +424,6 @@ class Environment:
                             collide_agent_id.remove(id)
 
                     if all_in_checking:
-
                         collide_agent_pos = next_pos[collide_agent_id].tolist()
                         for pos, id in zip(collide_agent_pos, collide_agent_id):
                             pos.append(id)
