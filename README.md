@@ -1,5 +1,4 @@
-# Multi-agent Path Finding using Reinforcement Learning
-
+# Learnable Decentralized MAPF using reinforcement learning with local communication
 
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat&logo=PyTorch&logoColor=white)
 ![Poetry](https://img.shields.io/badge/Poetry-%2300C4CC.svg?style=flat&logo=Poetry&logoColor=white)
@@ -8,9 +7,7 @@
 
 ## Description
 
-**Multi-agent pathfinding in partially observable environments. Search-based vs. RL-based algorithms.**
-
-The main goal of this repository is to provide a DHC [1] model implementation alongside with some benchmarks and charts.
+We perform extensive empirical evaluation of one of the state-of-the-art decentralized PO-MAPF algorithms which leverages communication between agents, Distributed Heuristic Communication (DHC). Through comprehensive experiments, the performance of DHC is observed to degrade when agents are faced with complete packet loss during communication. To mitigate this issue, we propose a novel algorithm called DHC-R (DHC-robust). Open-sourced model weights and the codebase are provided.
 
 ## Requirements
 In order for `models.dhc.train` to be successfully run, you have to have a machine equipped with 1 GPU and several CPUs.
@@ -34,80 +31,6 @@ export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 1. `models` dir contains the weights of the trained models
 2. `config.yaml` - training & model params, environmental settings etc.
 3. `pathfinding/models` provides one with the implementation of different models
-
-## Models
-### DHC
-
-**D**istributed, **H**euristic and **C**ommunication [1]
-
-> To guide RL algorithm on long-horizon goal-oriented tasks, we embed the potential choices of shortest paths from single source as heuristic guidance instead of using a specific path as in most existing works. Our method treats each agent independently and trains the model from a single agent’s perspective. The final trained policy is applied to each agent for decentralized execution. The whole system is distributed during training and is trained under a curriculum learning strategy.
-
-![visAfter](./static/DHC_architecture.png)  
-![visAfter](./static/DHC_training.png)
-
-<details>
-    <summary>DHC</summary>
-
-#### Benchmarking 
-
-**To run the generated test suite, run**
-```shell
-poetry run python3 pathfinding/models/dhc/evaluate.py test_model TESTS_DESCR MODEL_ID
-```
-where
-* TESTS_DESCR is a string of the format `'[(map_length, num_agents, density), ...]'` (you may want to copy this line from the generation command)
-* MODEL_ID is the name of the file from the `models` dir
-For example, by running
-
-```shell
-poetry run python3 pathfinding/models/dhc/evaluate.py test_model '[(40, 16, 0.3), (80, 4, 0.1)]' 60000
-```
-you will benchmark the `models/60000.pth` on the provided test cases 
-
-**Attention: the test cases must be generated first!** 
-
-#### Training
-1. Set the desired `actors` amount by setting the appropriate value for `dhc.train.num_actors` in `config.yaml`
-
-It is recommended to use the amount of CPU cores on you machine minus 2
-
-2. To initialize training, run
-```shell
-poetry run python3 pathfinding/models/dhc/train.py
-```
-
-The `models` dir will be created afterwards where the weights of the intermediate models will be saved.
-
-#### Visualizing
-
-1. To visualize the results, run
-```shell
-poetry run python3 pathfinding/models/dhc/visualize.py MODEL_ID TEST_NAME TEST_ID
-```
-where
-* MODEL_ID is the name of the file from the `models` dir
-* TEST_NAME is the name of the file with tests, for example `80length_32agents_0.3density.pkl`
-* TEST_ID [optional], id of the test from the provided test suite
-
-</details>
-
-## The setup
-The DHC network was trained on a single [NVIDIA TESLA T4 GPU](https://www.nvidia.com/en-us/data-center/tesla-t4/) for 7 hours.
-
-We used 20 CPU cores, 18 were used for the actors, additionally, 2 cores were used for the Learner and GlobalBuffer all together.
-
-
-## DHC Results
-
-**Our trained model outperforms PRIMAL benchmarks**
-
-![visAfter](./static/chart_40x40.png)
-![visAfter](./static/chart_80x80.png)
-
-![visAfter](./static/DHC_10x10_4_good.gif)
-![visAfter](./static/DHC_40x40_4_good.gif)
-![visAfter](./static/DHC_40x40_16_good.gif)
-![visAfter](./static/DHC_40x40_16_dense.gif)
 
 
 ## Contributing
@@ -138,9 +61,6 @@ poetry run pytest
 
 <a id="1">[1]</a> 
 Ma, Ziyuan and Luo, Yudong and Ma, Hang, 2021. Distributed Heuristic Multi-Agent Path Finding with Communication.
-
-<a id="2">[2]</a> 
-Sartoretti, G., Kerr, J., Shi, Y., Wagner, G., Kumar, T.S., Koenig, S. and Choset, H., 2019. Primal: Pathfinding via reinforcement and imitation multi-agent learning. IEEE Robotics and Automation Letters, 4(3), pp.2378-2385.
 
 ## License
 
