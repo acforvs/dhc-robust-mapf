@@ -33,6 +33,26 @@ export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 3. `pathfinding/models` provides one with the implementation of different models
 
 
+## Cite
+
+```
+@InProceedings{10.1007/978-3-031-43111-1_14,
+author="Savinov, Vladislav
+and Yakovlev, Konstantin",
+editor="Ronzhin, Andrey
+and Sadigov, Aminagha
+and Meshcheryakov, Roman",
+title="DHC-R: Evaluating ``Distributed Heuristic Communication'' and Improving Robustness for Learnable Decentralized PO-MAPF",
+booktitle="Interactive Collaborative Robotics",
+year="2023",
+publisher="Springer Nature Switzerland",
+address="Cham",
+pages="151--163",
+abstract="Multi-agent pathfinding (MAPF) is a problem of coordinating the movements of multiple agents operating a shared environment that has numerous industrial and research applications. In many practical cases the agents (robots) have limited visibility of the environment and must rely on local observations to make decisions. This scenario, known as partially observable MAPF (PO-MAPF), can be solved through decentralized approaches. In recent years, several learnable algorithms have been proposed for solving PO-MAPF. However, their performance is oftentimes not validated out-of-distribution (OOD), and the code is often not properly open-sourced. In this study, we conduct a comprehensive empirical evaluation of one of the state-of-the-art decentralized PO-MAPF algorithms, Distributed Heuristic Communication (DHC), Ma, Z., Luo, Y., Ma, H.: Distributed heuristic multi-agent path finding with communication. In: 2021 International Conference on Robotics and Automation (ICRA), pp. 8699--8705. IEEE, Xi'an, China (2021), which incorporates communication between agents. Our experiments reveal that the performance of DHC deteriorates when agents encounter complete packet loss during communication. To address this issue, we propose a novel algorithm called DHC-R that employs a similar architecture to the original DHC but introduces randomness into the graph neural network-based communication block, preventing the passage of some data packets during training. Empirical evaluation confirms that DHC-R outperforms DHC in scenarios with packet loss. Open-sourced model weights and the codebase are provided: https://github.com/acforvs/dhc-robust-mapf.",
+isbn="978-3-031-43111-1"
+}
+```
+
 ## Contributing
 <details>
     <summary>See the detailed contribution guide</summary>
